@@ -52,29 +52,29 @@ def convert_age_to_numeric(age_str):
 def perform_pca_analysis(data, target, feature_names, n_components=None, 
                         save_dir='analysis_results/pca_analysis'):
     """
-    执行PCA分析和可视化
+    Perform PCA analysis and visualization
     
     Args:
-        data: 特征数据
-        target: 目标变量
-        feature_names: 特征名称列表
-        n_components: PCA组件数量
-        save_dir: 保存目录
+        data: Feature data
+        target: Target variable
+        feature_names: List of feature names
+        n_components: Number of PCA components
+        save_dir: Save directory
     """
     os.makedirs(save_dir, exist_ok=True)
     
-    # 标准化数据
+    # Standardize data
     scaler = StandardScaler()
     data_scaled = scaler.fit_transform(data)
     
-    # 执行PCA
+    # Perform PCA
     if n_components is None:
-        n_components = min(data.shape[1], 10)  # 最多10个主成分
+        n_components = min(data.shape[1], 10)  # Maximum 10 principal components
     
     pca = PCA(n_components=n_components)
     data_pca = pca.fit_transform(data_scaled)
     
-    # 计算累计方差解释比例
+    # Calculate cumulative variance explained ratio
     explained_variance_ratio = pca.explained_variance_ratio_
     cumulative_variance_ratio = np.cumsum(explained_variance_ratio)
     
@@ -85,7 +85,7 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
     for i, ratio in enumerate(explained_variance_ratio):
         print(f"PC{i+1}: {ratio:.4f} ({ratio*100:.2f}%)")
     
-    # 1. 方差解释比例图
+    # 1. Variance explained ratio plot
     plt.figure(figsize=(12, 5))
     
     plt.subplot(1, 2, 1)
@@ -109,7 +109,7 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
     plt.savefig(f'{save_dir}/pca_variance_analysis.png', dpi=300, bbox_inches='tight')
     plt.close()
     
-    # 2. 2D PCA可视化
+    # 2. 2D PCA visualization
     plt.figure(figsize=(15, 5))
     
     # PC1 vs PC2
@@ -145,7 +145,7 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
     plt.savefig(f'{save_dir}/pca_2d_visualization.png', dpi=300, bbox_inches='tight')
     plt.close()
     
-    # 3. 3D PCA可视化
+    # 3. 3D PCA visualization
     if n_components >= 3:
         fig = plt.figure(figsize=(10, 8))
         ax = fig.add_subplot(111, projection='3d')
@@ -161,12 +161,12 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
         plt.savefig(f'{save_dir}/pca_3d_visualization.png', dpi=300, bbox_inches='tight')
         plt.close()
     
-    # 4. 交互式PCA可视化
+    # 4. Interactive PCA visualization
     df_pca = pd.DataFrame(data_pca[:, :min(3, n_components)], 
                          columns=[f'PC{i+1}' for i in range(min(3, n_components))])
     df_pca['Target'] = target
     
-    # 2D交互式图
+    # 2D interactive plot
     fig = px.scatter(df_pca, x='PC1', y='PC2', color='Target',
                     title='Interactive PCA: PC1 vs PC2',
                     labels={'PC1': f'PC1 ({explained_variance_ratio[0]:.2%} variance)',
@@ -174,7 +174,7 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
     fig.update_layout(template='plotly_white')
     pio.write_html(fig, f'{save_dir}/pca_interactive_2d.html')
     
-    # 3D交互式图
+    # 3D interactive plot
     if n_components >= 3:
         fig = px.scatter_3d(df_pca, x='PC1', y='PC2', z='PC3', color='Target',
                            title='Interactive 3D PCA Visualization',
@@ -184,11 +184,11 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
         fig.update_layout(template='plotly_white')
         pio.write_html(fig, f'{save_dir}/pca_interactive_3d.html')
     
-    # 5. 主成分载荷图（Loading Plot）
-    if len(feature_names) <= 20:  # 只有当特征数量不太多时才绘制
+    # 5. Principal component loading plot (Loading Plot)
+    if len(feature_names) <= 20:  # Only plot when feature count is not too large
         plt.figure(figsize=(12, 8))
         
-        loadings = pca.components_[:2].T  # 前两个主成分的载荷
+        loadings = pca.components_[:2].T  # Loadings of first two principal components
         
         plt.subplot(2, 2, 1)
         for i, feature in enumerate(feature_names):
@@ -202,7 +202,7 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
         plt.grid(True, alpha=0.3)
         plt.axis('equal')
         
-        # 载荷矩阵热力图
+        # Loading matrix heatmap
         plt.subplot(2, 2, 2)
         sns.heatmap(pca.components_[:min(5, n_components)], 
                    xticklabels=feature_names, 
@@ -215,7 +215,7 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
         plt.savefig(f'{save_dir}/pca_loadings.png', dpi=300, bbox_inches='tight')
         plt.close()
     
-    # 6. 保存PCA结果
+    # 6. Save PCA results
     pca_results = {
         'explained_variance_ratio': explained_variance_ratio.tolist(),
         'cumulative_variance_ratio': cumulative_variance_ratio.tolist(),
@@ -228,7 +228,7 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
     with open(f'{save_dir}/pca_results.json', 'w') as f:
         json.dump(pca_results, f, indent=4)
     
-    # 保存PCA变换后的数据
+    # Save PCA transformed data
     np.save(f'{save_dir}/pca_transformed_data.npy', data_pca)
     
     return pca, data_pca, explained_variance_ratio
@@ -236,14 +236,14 @@ def perform_pca_analysis(data, target, feature_names, n_components=None,
 def perform_tsne_analysis(data, target, perplexity=30, max_iter=500,
                          save_dir='analysis_results/tsne_analysis'):
     """
-    执行t-SNE分析
+    Perform t-SNE analysis
     
     Args:
-        data: 特征数据
-        target: 目标变量
-        perplexity: t-SNE perplexity参数
-        max_iter: 最大迭代次数
-        save_dir: 保存目录
+        data: Feature data
+        target: Target variable
+        perplexity: t-SNE perplexity parameter
+        max_iter: Maximum iterations
+        save_dir: Save directory
     """
     os.makedirs(save_dir, exist_ok=True)
     
@@ -425,7 +425,7 @@ for feature in numeric_features:
     print(f"\n{feature} Statistics by Target Value:")
     print(df.groupby('target')[feature].describe())
 
-# ===== 新增：PCA分析 =====
+# ===== New: PCA Analysis =====
 # Prepare data for PCA analysis
 numeric_data = df[numeric_features].dropna()
 target_data = df.loc[numeric_data.index, 'target']
