@@ -8,7 +8,6 @@ Date: 2025-06-06
 import pandas as pd
 import numpy as np
 
-# All Chinese comments, print statements, docstrings, and error messages have been translated to English. Variable names are kept unless in pinyin or Chinese.
 # Read filtered data
 print("Reading data...")
 df = pd.read_excel("filtered_dm_record_list.xlsx")
