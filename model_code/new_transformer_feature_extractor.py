@@ -1,6 +1,5 @@
 # new_transformer_feature_extractor.py
 # Transformer feature extractor implementation for ECG deep learning project.
-# All code, comments, docstrings, and variable names are fully in English for academic submission.
 
 import tensorflow as tf
 from tensorflow.keras import layers, Model
