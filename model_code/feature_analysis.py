@@ -1,12 +1,6 @@
 # feature_analysis.py
 # Feature analysis and statistical utilities for ECG deep learning project.
-# All Chinese comments, print statements, docstrings, and error messages have been translated to English. Variable names are kept unless in pinyin or Chinese.
-"""
-File: feature_analysis.py
-Description: Feature analysis and visualization utilities for ECG data.
-Author: chenhuilin
-Date: 2025-06-06
-"""
+
 
 import pandas as pd
 import numpy as np
