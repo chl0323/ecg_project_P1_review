@@ -1,6 +1,5 @@
 # drift_detection_module.py
 # Module for detecting data distribution drift in ECG deep learning project.
-# All Chinese comments, print statements, docstrings, and error messages have been translated to English. Variable names are kept unless in pinyin or Chinese.
 
 import numpy as np
 import matplotlib.pyplot as plt
