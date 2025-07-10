@@ -1,6 +1,5 @@
 # new_ranpac_classifier.py
 # RanPAC classifier implementation for ECG deep learning project.
-# All Chinese comments, print statements, docstrings, and error messages have been translated to English. Variable names are kept unless in pinyin or Chinese.
 
 import numpy as np
 import torch
