@@ -1,0 +1,29 @@
+============================================================
+STATISTICAL ANALYSIS REPORT
+============================================================
+
+OVERALL TEST: One-way ANOVA
+Test Statistic: 2.0386
+p-value: 0.135060
+Significance Level: 0.05
+Significant: No
+
+PAIRWISE COMPARISON RESULTS:
+----------------------------------------
+Transformer_vs_CNN
+  Test Type: Independent t-test
+  p-value: 0.440259
+  Significant: No
+  Effect Size: 0.3497
+
+Transformer_vs_LSTM
+  Test Type: Independent t-test
+  p-value: 0.060282
+  Significant: No
+  Effect Size: 0.4084
+
+CNN_vs_LSTM
+  Test Type: Independent t-test
+  p-value: 0.634471
+  Significant: No
+  Effect Size: 0.2182
