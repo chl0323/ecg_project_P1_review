@@ -1,6 +1,5 @@
 # shap_explain.py
 # SHAP (SHapley Additive exPlanations) model interpretability analysis for ECG deep learning project.
-# All code, comments, docstrings, and variable names are fully in English for academic submission.
 
 import shap
 import numpy as np
