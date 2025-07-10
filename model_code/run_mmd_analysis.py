@@ -1,12 +1,6 @@
 # run_mmd_analysis.py
 # Script to run MMD-based drift analysis for ECG deep learning project.
-# All Chinese comments, print statements, docstrings, and error messages have been translated to English. Variable names are kept unless in pinyin or Chinese.
-"""
-File: run_mmd_analysis.py
-Description: Script for running and visualizing MMD-based drift analysis on ECG data.
-Author: chenhuilin
-Date: 2025-06-06
-"""
+
 
 import numpy as np
 import matplotlib.pyplot as plt
