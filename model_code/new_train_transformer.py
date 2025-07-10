@@ -1,6 +1,6 @@
 # new_train_transformer2.py
 # Transformer model training script for ECG deep learning project.
-# All Chinese comments, print statements, docstrings, and error messages have been translated to English. Variable names are kept unless in pinyin or Chinese.
+
 import pandas as pd
 import numpy as np
 from new_transformer_feature_extractor import TransformerFeatureExtractor
