@@ -1,6 +1,5 @@
 # evaluation.py
 # Evaluation utilities for continual learning models in ECG deep learning project.
-# All comments, print statements, docstrings, and error messages are in English. Variable names are kept unless in pinyin or Chinese.
 
 import numpy as np
 import matplotlib.pyplot as plt
