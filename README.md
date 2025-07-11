@@ -81,7 +81,7 @@ Key dependencies include:
 4. Execute continual learning experiments
 
    ```bash
-   python ranpac.py
+   python main.py
    ```
 
 ## Summary of Results
