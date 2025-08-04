@@ -1,9 +1,4 @@
-"""
-File: data_processing2.py
-Description: Data preprocessing pipeline for ECG data (cleaning, normalization, etc.).
-Author: chenhuilin
-Date: 2025-06-06
-"""
+#Data preprocessing pipeline for ECG data (cleaning, normalization, etc.).
 
 import pandas as pd
 import numpy as np
@@ -164,36 +159,41 @@ def load_and_preprocess_data(test_size=0.2, val_size=0.1, random_state=42):
     X_seq, y_seq = prepare_sequence_data_by_subject(df, sequence_length)
     X_seq_2d = X_seq.reshape(X_seq.shape[0], -1)
     
-    smote = SMOTE(random_state=random_state)
-    X_balanced, y_balanced = smote.fit_resample(X_seq_2d, y_seq)
-    
-    class_weights = {0: 1, 1: len(y_seq[y_seq == 0]) / len(y_seq[y_seq == 1])}
-    
-    os.makedirs('processed_data', exist_ok=True)
-    np.save('processed_data/X_balanced.npy', X_balanced)
-    np.save('processed_data/y_balanced.npy', y_balanced)
-    
-    # Split dataset
+    # First split the data to avoid data leakage
     X_temp, X_test, y_temp, y_test = train_test_split(
-        X_balanced, y_balanced, test_size=test_size, random_state=random_state, stratify=y_balanced)
+        X_seq_2d, y_seq, test_size=test_size, random_state=random_state, stratify=y_seq)
     val_ratio = val_size / (1 - test_size)
     X_train, X_val, y_train, y_val = train_test_split(
         X_temp, y_temp, test_size=val_ratio, random_state=random_state, stratify=y_temp)
     
-    np.save('processed_data/X_train_smote.npy', X_train)
-    np.save('processed_data/y_train_smote.npy', y_train)
+    # Apply SMOTE only to training data to avoid data leakage
+    print("[SMOTE] Applying SMOTE only to training data...")
+    smote = SMOTE(random_state=random_state)
+    X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
+    
+    # Calculate class weights based on original training data
+    class_weights = {0: 1, 1: len(y_train[y_train == 0]) / len(y_train[y_train == 1])}
+    
+    os.makedirs('processed_data', exist_ok=True)
+    np.save('processed_data/X_balanced_smote.npy', X_train_balanced)
+    np.save('processed_data/y_balanced_smote.npy', y_train_balanced)
+    
+    # Save all datasets
+    np.save('processed_data/X_train_smote.npy', X_train_balanced)
+    np.save('processed_data/y_train_smote.npy', y_train_balanced)
     np.save('processed_data/X_val_smote.npy', X_val)
     np.save('processed_data/y_val_smote.npy', y_val)
     np.save('processed_data/X_test_smote.npy', X_test)
     np.save('processed_data/y_test_smote.npy', y_test)
     
-    print(f"[Data Preprocessing] Completed! Training set: {X_train.shape}, Validation set: {X_val.shape}, Test set: {X_test.shape}")
+    print(f"[Data Preprocessing] Completed! Training set: {X_train_balanced.shape}, Validation set: {X_val.shape}, Test set: {X_test.shape}")
+    print(f"[SMOTE] Training data balanced: Original {len(y_train)} -> Balanced {len(y_train_balanced)}")
     
     return {
-        'train': (X_train, y_train),
+        'train': (X_train_balanced, y_train_balanced),
         'val': (X_val, y_val),
         'test': (X_test, y_test),
-        'full': (X_balanced, y_balanced),
+        'full': (X_train_balanced, y_train_balanced),  # Only balanced training data
         'class_weights': class_weights
     }
 
