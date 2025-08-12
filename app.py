@@ -20,7 +20,7 @@ try:
     from simple_transformer_replay_predictor import get_simple_transformer_replay_predictor
     TRANSFORMER_AVAILABLE = True
 except ImportError as e:
-    st.error(f"❌ Cannot import Transformer model: {e}")
+    st.error(f"Cannot import Transformer model: {e}")
     TRANSFORMER_AVAILABLE = False
 
 APP_DIR = Path(__file__).parent.resolve()
@@ -210,7 +210,7 @@ def predict_with_transformer(feature_data):
         tuple: (predictions, probabilities)
     """
     if not TRANSFORMER_AVAILABLE:
-        st.error("❌ Transformer model not available")
+        st.error(" Transformer model not available")
         return None, None
     
     try:
@@ -218,7 +218,7 @@ def predict_with_transformer(feature_data):
         predictor = get_simple_transformer_replay_predictor()
         
         if predictor is None:
-            st.error("❌ Cannot initialize Transformer predictor")
+            st.error(" Cannot initialize Transformer predictor")
             return None, None
         
         predictions = []
@@ -250,7 +250,7 @@ def predict_with_transformer(feature_data):
         return np.array(predictions), np.array(probabilities)
         
     except Exception as e:
-        st.error(f"❌ Transformer prediction failed: {e}")
+        st.error(f" Transformer prediction failed: {e}")
         return None, None
 
 def create_risk_dashboard(predictions, probabilities, feature_data):
@@ -422,7 +422,7 @@ def main():
     # Check model availability
     if not TRANSFORMER_AVAILABLE:
         st.error("""
-        ❌ **Transformer model not available**
+         **Transformer model not available**
         
         Please ensure:
         1. `model_code` directory exists and contains necessary model files
@@ -457,14 +457,10 @@ def main():
         
         if uploaded_file is not None:
             try:
-                # 读取上传的数据
                 patient_data = pd.read_csv(uploaded_file)
-                
-                # 保留ECG_Record列用于时间序列分析，但确保它不在特征列表中
                 ecg_record_column = None
                 if 'ECG_Record' in patient_data.columns:
                     ecg_record_column = patient_data['ECG_Record'].copy()
-                    # 只删除用于预测的特征列，保留ECG_Record用于显示
                     feature_data_for_prediction = patient_data.drop('ECG_Record', axis=1)
                 else:
                     feature_data_for_prediction = patient_data
@@ -597,10 +593,10 @@ def main():
             st.dataframe(results_df, use_container_width=True)
             
             # Add probability calculation explanation
-            st.subheader('📊 Probability Calculation Explanation')
-            with st.expander("🔍 Detailed explanation of probability calculation", expanded=True):
+            st.subheader('Probability Calculation Explanation')
+            with st.expander("Detailed explanation of probability calculation", expanded=True):
                 st.markdown("""
-                **🎯Probability Calculation Principle:**
+                **Probability Calculation Principle:**
                 
                 **1. Model Architecture**
                 - This application uses **Transformer + Replay** model for ECG signal analysis
@@ -732,7 +728,7 @@ def main():
                         )
                         st.plotly_chart(fig_radar, use_container_width=True)
 
-                        st.subheader('📈 Feature Value Bar Chart Comparison')
+                        st.subheader(' Feature Value Bar Chart Comparison')
                         fig_bar = go.Figure()
                         fig_bar.add_trace(go.Bar(x=feature_names_clean, y=feature_values, name='Current Record', marker_color='#ff6b6b', opacity=0.8))
                         if normal_count > 0:
@@ -744,11 +740,11 @@ def main():
                             fig_bar.add_trace(go.Bar(x=feature_names_clean, y=normal_values, name='Normal Mean', marker_color='#20b2aa', opacity=0.6))
                         fig_bar.update_layout(title='Feature Value Comparison Bar Chart', xaxis_title='ECG Features', yaxis_title='Feature Values', barmode='group', height=500)
                         st.plotly_chart(fig_bar, use_container_width=True)
-                        st.info(f'🔍 Detected {len(diabetes_indices)} high-risk records, using radar chart and bar chart for intuitive analysis')
+                        st.info(f' Detected {len(diabetes_indices)} high-risk records, using radar chart and bar chart for intuitive analysis')
 
                     elif len(diabetes_indices) > 1:
                         # Multiple records: time series
-                        st.subheader('📈 Multiple High-Risk ECG Record Feature Time Series Changes')
+                        st.subheader(' Multiple High-Risk ECG Record Feature Time Series Changes')
                         
                         n_features = len(available_time_features)
                         n_cols = 3
@@ -961,7 +957,7 @@ def main():
             
             # Custom question input
             st.markdown("---")
-            st.markdown("**💭 Or, you can ask your own question:**")
+            st.markdown("** Or, you can ask your own question:**")
             
             user_question = st.text_input("Please enter your question:", placeholder="For example: What is my risk level? How often should I recheck?")
             
@@ -1013,7 +1009,7 @@ def main():
             # Display chat history
             if st.session_state.chat_history:
                 st.markdown("---")
-                st.markdown("**📝 Chat History:**")
+                st.markdown("** Chat History:**")
                 
                 for i, message in enumerate(st.session_state.chat_history):
                     if message["role"] == "user":
