@@ -1,6 +1,5 @@
 # cnn_baseline_model.py
 # CNN baseline model for ECG classification tasks.
-# Implements a traditional CNN architecture with three convolution blocks for local waveform feature extraction.
 
 import tensorflow as tf
 from tensorflow.keras import layers, Model
